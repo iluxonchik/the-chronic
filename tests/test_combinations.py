@@ -81,7 +81,21 @@ class CombinationsTestCase(unittest.TestCase):
 
 
     def test_combinations_with_build_up(self):
-        pass
+        thechronic = TheChronic(words=self.words1)
+
+        expected_result = [
+            'cat', 'dog', 'rat'
+            'catcat', 'catdog', 'catrat',
+            'dogcat', 'dogdog', 'dograt',
+            'ratcat', 'ratdog', 'ratrat'
+        ]
+
+        res = list(thechronic.combine(num_words=2, build_up=True))
+        self.assertEqual(len(res), 12)
+        self.assertCountEqual(res, expected_result)
+
+        res = list(thechronic.combine(num_words=5, build_up=True))
+        self.assertEqual(len(res), 363)
 
     def test_combinations_load_from_single_file(self):
         thechronic = TheChronic(files=self.WORDS1_PATH)

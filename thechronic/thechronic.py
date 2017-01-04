@@ -6,7 +6,7 @@ class TheChronic(object):
         self._parse_words_arg(words)
         self._parse_files_arg(files)
 
-    def combine(self, num_words=1, build_up=False, min_length=0, max_length=None):
+    def combine(self, num_words=1, build_up=False, min_length=1, max_length=None):
         self._min_length = min_length
         self._max_length = max_length
         if build_up:

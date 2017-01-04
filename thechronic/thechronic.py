@@ -6,22 +6,32 @@ class TheChronic(object):
         self._parse_words_arg(words)
         self._parse_files_arg(files)
 
-    def combine(self, num_words=1, build_up=False):
-
+    def combine(self, num_words=1, build_up=False, min_length=0, max_length=None):
+        self._min_length = min_length
+        self._max_length = max_length
         if build_up:
             iterators = ()
             for i in range(1, num_words + 1):
                 res = product(self._words, repeat=i)
-                iterators += (self._get_words_generator(res),)
+                iterators += (self._get_words_generator(res, min_length, max_length),)
             return chain(*iterators)
 
         res = product(self._words, repeat=num_words)
+        return self._get_words_generator(res, min_length, max_length)
 
-        return self._get_words_generator(res)
-
-    def _get_words_generator(self, words):
+    def _get_words_generator(self, words, min_length, max_length):
         for word_parts in words:
-            yield ''.join(word_parts)
+            word = ''.join(word_parts)
+            if self._is_word_within_limits(word, min_length, max_length):
+                yield word
+
+    def _is_word_within_limits(self, word, min_length, max_length):
+        if len(word) >= min_length:
+            if max_length is None:
+                return True
+            elif len(word) <= max_length:
+                return True
+        return False
 
     def _parse_words_arg(self, words):
         if is_iterable(words):

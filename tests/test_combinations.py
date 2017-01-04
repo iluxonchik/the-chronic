@@ -160,3 +160,43 @@ class CombinationsTestCase(unittest.TestCase):
         res = list(thechronic.combine(num_words=3))
         self.assertEqual(len(res), 216)
         self.assertCountEqual(res, expected_result)
+
+    def test_min_length(self):
+        thechronic = TheChronic(words=self.words1)
+
+        expected_result = [
+            'catcat', 'catdog', 'catrat',
+            'dogcat', 'dogdog', 'dograt',
+            'ratcat', 'ratdog', 'ratrat'
+        ]
+
+        res = list(thechronic.combine(num_words=2, build_up=True, min_length=4))
+        self.assertEqual(len(res), 9)
+        self.assertCountEqual(res, expected_result)
+
+    def test_max_length(self):
+        thechronic = TheChronic(words=self.words1)
+
+        expected_result = [
+            'cat', 'dog', 'rat',
+        ]
+
+        res = list(thechronic.combine(num_words=2, build_up=True, max_length=3))
+        self.assertEqual(len(res), 3)
+        self.assertCountEqual(res, expected_result)
+
+
+        res = list(thechronic.combine(num_words=2, build_up=True, max_length=2))
+        self.assertEqual(len(res), 0)
+        self.assertCountEqual(res, [])
+
+    def test_min_max_length(self):
+        thechronic = TheChronic(words=['the', 'game', 'the documentary',
+        'the doctor\'s advocate', 'l.a.x.', 'red', '1992'])
+
+        expected_result = ['the', 'game', 'red', '1992']
+
+        res = list(thechronic.combine(num_words=1, build_up=True,
+                                                    min_length=2, max_length=4))
+        self.assertEqual(len(res), 4)
+        self.assertCountEqual(res, expected_result)

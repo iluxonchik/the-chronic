@@ -84,7 +84,7 @@ class CombinationsTestCase(unittest.TestCase):
         thechronic = TheChronic(words=self.words1)
 
         expected_result = [
-            'cat', 'dog', 'rat'
+            'cat', 'dog', 'rat',
             'catcat', 'catdog', 'catrat',
             'dogcat', 'dogdog', 'dograt',
             'ratcat', 'ratdog', 'ratrat'

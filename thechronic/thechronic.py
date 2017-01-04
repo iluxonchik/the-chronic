@@ -6,7 +6,15 @@ class TheChronic(object):
         self._parse_words_arg(words)
         self._parse_files_arg(files)
 
-    def combine(self, num_words=1):
+    def combine(self, num_words=1, build_up=False):
+
+        if build_up:
+            iterators = ()
+            for i in range(1, num_words + 1):
+                res = product(self._words, repeat=i)
+                iterators += (self._get_words_generator(res),)
+            return chain(*iterators)
+
         res = product(self._words, repeat=num_words)
 
         return self._get_words_generator(res)

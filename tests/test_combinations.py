@@ -200,3 +200,28 @@ class CombinationsTestCase(unittest.TestCase):
                                                     min_length=2, max_length=4))
         self.assertEqual(len(res), 4)
         self.assertCountEqual(res, expected_result)
+
+    def test_ending_numbers(self):
+        thechronic = TheChronic(words=self.words1)
+        expected_result = [
+            'catcat201', 'catdog102', 'catrat001',
+            'dogcat101', 'dogdog102', 'dograt122',
+            'ratcat500', 'ratdog404', 'ratrat007'
+        ]
+        thechronic.add_numeric(digits=3, build_up=False)
+
+        res = list(thechronic.combine(num_words=2, build_up=True))
+        self.assertIn(res, expected_result)
+
+
+    def test_ending_numbers_with_build_up(self):
+        thechronic = TheChronic(words=self.words1)
+        expected_result = [
+            'catcat1', 'catdog00', 'catrat021',
+            'dogcat22', 'dogdog99', 'dograt122',
+            'ratcat500', 'ratdog404', 'ratrat007'
+        ]
+        thechronic.add_numeric(digits=3, build_up=True)
+
+        res = list(thechronic.combine(num_words=2, build_up=True))
+        self.assertIn(res, expected_result)

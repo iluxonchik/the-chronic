@@ -2,12 +2,21 @@
 Test if comibnations of words are working as expected.
 """
 import unittest
+from collections import Iterable
 from tests.utils import get_words_generator
 from itertools import product
 from thechronic.thechronic import TheChronic
 
 
+
 class CombinationsTestCase(unittest.TestCase):
+
+    def _assert_iterable_contains(self, member, container):
+        if not isinstance(member, Iterable):
+            member = (member, )
+
+        for m in member:
+            self.assertIn(m, container)
 
     @classmethod
     def setUpClass(cls):
@@ -49,6 +58,7 @@ class CombinationsTestCase(unittest.TestCase):
             'ratcat', 'ratdog', 'ratrat'
         ]
         res = list(thechronic.combine(num_words=2))
+
         self.assertEqual(len(res), 9)
         self.assertCountEqual(res, expected_result)
 
@@ -208,13 +218,28 @@ class CombinationsTestCase(unittest.TestCase):
             'dogcat101', 'dogdog102', 'dograt122',
             'ratcat500', 'ratdog404', 'ratrat007'
         ]
+
         thechronic.add_numeric(digits=3, build_up=False)
 
         res = list(thechronic.combine(num_words=2, build_up=True))
-        self.assertIn(res, expected_result)
-
+        self.assertEqual(len(res), 12012)
+        self._assert_iterable_contains(expected_result, res)
 
     def test_ending_numbers_with_build_up(self):
+        thechronic = TheChronic(words=self.words1)
+        expected_result = [
+            'cat1', 'dog23', 'cat17', 'rat12',
+            'catcat1', 'catdog00', 'catrat021',
+            'dogcat22', 'dogdog99', 'dograt122',
+            'ratcat500', 'ratdog404', 'ratrat007'
+        ]
+        thechronic.add_numeric(digits=3, build_up=True)
+
+        res = list(thechronic.combine(num_words=2, build_up=True))
+        self.assertEqual(len(res), 13332)
+        self._assert_iterable_contains(expected_result, res)
+
+    def test_ending_numbers_no_combine_build_up(self):
         thechronic = TheChronic(words=self.words1)
         expected_result = [
             'catcat1', 'catdog00', 'catrat021',
@@ -223,5 +248,15 @@ class CombinationsTestCase(unittest.TestCase):
         ]
         thechronic.add_numeric(digits=3, build_up=True)
 
-        res = list(thechronic.combine(num_words=2, build_up=True))
-        self.assertIn(res, expected_result)
+        res = list(thechronic.combine(num_words=2, build_up=False))
+        self.assertEqual(len(res), 9999)
+        self._assert_iterable_contains(expected_result, res)
+
+    def test_ending_numbers_empty_wordlist(self):
+        thechronic = TheChronic()
+        expected_result = ['201', '19', '0', '022', '000',]
+        thechronic.add_numeric(digits=3, build_up=True)
+
+        res = list(thechronic.combine(num_words=2, build_up=False))
+        self.assertEqual(len(res), 1110)
+        self._assert_iterable_contains(expected_result, res)

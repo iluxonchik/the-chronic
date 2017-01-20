@@ -5,14 +5,14 @@ import unittest
 from collections import Iterable
 from tests.utils import get_words_generator
 from itertools import product
+from thechronic.utils import is_iterable
 from thechronic.thechronic import TheChronic
-
 
 
 class CombinationsTestCase(unittest.TestCase):
 
     def _assert_iterable_contains(self, member, container):
-        if not isinstance(member, Iterable):
+        if not is_iterable(member):
             member = (member, )
 
         for m in member:

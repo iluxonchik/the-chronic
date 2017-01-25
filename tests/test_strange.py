@@ -25,6 +25,11 @@ class StrangeTestCase(unittest.TestCase):
         self.assertTrue(isinstance(srange[0], str))
         self.assertCountEqual(srange, ran)
 
+    def test_no_start(self):
+        srange = list(Strange(3))
+        xres = ['0', '1', '2']
+        self.assertCountEqual(srange, xres)
+
     def test_srange_reiterable(self):
         srange = Strange(1, 3)
         xres = ['1', '2']

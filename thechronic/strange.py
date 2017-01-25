@@ -7,7 +7,10 @@ class Strange(object):
     multiple times.
     """
 
-    def __init__(self, start, stop, step=1):
+    def __init__(self, start, stop=None, step=1):
+        if stop is None:
+            stop = start
+            start = 0
         self._range = range(start, stop, step)
         self._iter = iter(self._range)
 

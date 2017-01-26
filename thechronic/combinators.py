@@ -1,14 +1,14 @@
 """
 Module containig combinator implementations and interface.
 """
-from itertools import product
+from itertools import product, tee
 from abc import ABCMeta, abstractmethod
 
-from thechronic.utils import is_iterable, combine_generators
+from thechronic.utils import is_iterable
 
 class Combinator(metaclass=ABCMeta):
     @abstractmethod
-    def get_generator(self, words):
+    def get_iterators(self, words):
         pass
 
 class NumericCombinator(Combinator):
@@ -17,15 +17,21 @@ class NumericCombinator(Combinator):
         self._num_digits = num_digits
         self._build_up = build_up
 
-    def get_generator(self, words):
-        generators = ()
-        if self._build_up:
-            words = list(words)
-            for i in range(1, self._num_digits + 1):
-                num_generator = product(self._DIGTIS, repeat=i)
-                res = combine_generators(words, num_generator)
-                generators += (res,)
+    def get_iterators(self, words):
+        iterators = ()
+        begin_range = 1
+
+        if not self._build_up:
+            begin_range = self._num_digits
+            words = (words,)
         else:
-            num_generator = product(self._DIGTIS, repeat=self._num_digits)
-            generators += (combine_generators(words, num_generator),)
-        return generators
+            words = tee(words, self._num_digits + 1 - begin_range)
+
+        index = 0
+        for i in range(begin_range, self._num_digits + 1):
+            num_generator = product(self._DIGTIS, repeat=i)
+            res = product(words[index], num_generator)
+            iterators += (res,)
+            index += 1
+
+        return iterators

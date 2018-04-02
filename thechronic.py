@@ -15,10 +15,10 @@ def positive_int(value):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate passwords by combining words from provided files(s)')
+    parser.add_argument('files', nargs='*', default=[], help='File(s) to load the words from.')
     parser.add_argument('--min', type=int, default=1, help='Minimum output word length.')
     parser.add_argument('--max', type=positive_int, default=None, help='Maximum output word length.')
     parser.add_argument('-n','--num_words', type=positive_int, default=1, help='Number of words to combine.')
-    parser.add_argument('-f', '--files', nargs='*', default=[], help='File(s) to load the words from.')
     parser.add_argument('-b', '--no_build_up', action='store_true',
         default=False, help='Don\'t build up number of word combinations. '
         'This means that if you provide the value 3 for the \'-n\' argument, '
